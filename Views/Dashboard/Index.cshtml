@@ -1,0 +1,25 @@
+﻿@model LoginApp.Models.ApplicationUser
+@{ ViewData["Title"] = "Dashboard"; }
+
+<div class="container mt-5">
+    <div class="alert alert-success">
+        <h4>Welcome, @Model?.FullName! 👋</h4>
+        <p>You are logged in as <@Model?.Email</strong></p>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-4">
+            <div class="card text-center p-3">
+                <h5>Profile</h5>
+                <p class="text-muted">@Model?.Email</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-outline-danger">Logout</button>
+        </form>
+    </div>
+</div>
