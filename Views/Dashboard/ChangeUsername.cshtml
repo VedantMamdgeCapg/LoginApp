@@ -1,0 +1,40 @@
+@model LoginApp.Models.ChangeUsernameViewModel
+@{
+    ViewData["Title"] = "Change Username";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="mb-4">Change Username</h3>
+
+                @if (ViewBag.SuccessMessage != null)
+                {
+                    <div class="alert alert-success">@ViewBag.SuccessMessage</div>
+                }
+
+                <form asp-action="ChangeUsername" method="post">
+                    @Html.AntiForgeryToken()
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="NewUserName" class="form-label"></label>
+                        <input asp-for="NewUserName" class="form-control" placeholder="Enter a new username" />
+                        <span asp-validation-for="NewUserName" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">Update username</button>
+                </form>
+
+                <div class="mt-3 text-center">
+                    <a asp-controller="Dashboard" asp-action="Index">Back to Dashboard</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

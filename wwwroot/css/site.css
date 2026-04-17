@@ -19,6 +19,15 @@ html {
 
 body {
   margin-bottom: 60px;
+  background: linear-gradient(180deg, #f4f8ff 0%, #eef5fb 100%);
+}
+
+.card {
+  border-radius: 1rem;
+}
+
+.container {
+  max-width: 960px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

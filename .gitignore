@@ -1,0 +1,20 @@
+# Build artifacts
+bin/
+obj/
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# ASP.NET Core
+*.db
+*.log
+
+# Rider
+.idea/
+
+# Visual Studio Code
+.vscode/
