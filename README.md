@@ -1,66 +1,390 @@
-# LoginApp
+# LoginApp – ASP.NET Core 8 MVC
 
-A simple ASP.NET Core MVC login application using Identity and Entity Framework Core.
+A secure **ASP.NET Core 8 MVC** application implementing authentication and authorization using **ASP.NET Core Identity**, **Entity Framework Core**, **Azure App Configuration**, and **Azure Key Vault**.
+
+This project follows security best practices and is designed to be GitHub-safe, cloud-friendly, and production-ready.
+
+---
 
 ## Features
 
-- User registration and login
-- Password reset and forgot password flows
-- Email-based account verification support via a configurable email sender
-- Identity management with unique email enforcement
-- SQL Server-backed user store
-- Basic dashboard with account settings
-
-## Technologies
-
-- ASP.NET Core 8.0
-- Entity Framework Core 8.0
+- ASP.NET Core 8 MVC
 - ASP.NET Core Identity
-- SQL Server
+- Login and registration functionality
+- Role-based authorization
+- Entity Framework Core
+- SQL Server / Azure SQL support
+- Azure App Configuration
+- Azure Key Vault integration
+- Email support
+- Environment-based configuration
+- GitHub-safe configuration with no secrets committed
+
+---
+
+## Tech Stack
+
+- .NET 8
+- ASP.NET Core MVC
+- ASP.NET Core Identity
+- Entity Framework Core
+- SQL Server / Azure SQL
+- Azure App Configuration
+- Azure Key Vault
+- Visual Studio 2022 / VS Code
+
+---
+
+## Project Structure
+
+```text
+LoginApp/
+│
+├── Controllers/
+├── Models/
+├── Views/
+├── Data/
+├── Services/
+├── wwwroot/
+│
+├── appsettings.json
+├── Program.cs
+├── LoginApp.csproj
+├── README.md
+└── .gitignore
+```
+
+---
+
+## Configuration and Secrets
+
+This project uses environment-based configuration.
+
+### Tracked in GitHub
+
+The following file is safe to commit:
+
+```text
+appsettings.json
+```
+
+`appsettings.json` should contain only safe, non-sensitive default settings.
+
+Example:
+
+```json
+{
+  "AllowedHosts": "*",
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}
+```
+
+### Ignored by Git
+
+The following files should not be committed:
+
+```text
+appsettings.Development.json
+appsettings.Production.json
+appsettings.Staging.json
+```
+
+These files may contain environment-specific values such as:
+
+- Database connection strings
+- API keys
+- Email credentials
+- Azure service connection details
+- Client secrets
+- Certificates
+
+---
+
+## Azure App Configuration and Key Vault
+
+This application is designed to avoid storing secrets directly in source control.
+
+Recommended approach:
+
+- Use **Azure App Configuration** for non-secret application settings.
+- Use **Azure Key Vault** for sensitive values such as:
+  - Database connection strings
+  - Email passwords
+  - API keys
+  - Client secrets
+  - Certificates
+
+For local development, use one of the following options:
+
+- .NET User Secrets
+- Environment variables
+- Azure App Configuration with Key Vault references
+
+---
+
+## Prerequisites
+
+Before running this project, make sure you have the following installed:
+
+- .NET 8 SDK
+- SQL Server or Azure SQL Database
+- Visual Studio 2022 or Visual Studio Code
+- Entity Framework Core CLI tools
+
+Install EF Core CLI tools if required:
+
+```bash
+dotnet tool install --global dotnet-ef
+```
+
+If already installed, update it using:
+
+```bash
+dotnet tool update --global dotnet-ef
+```
+
+---
 
 ## Getting Started
 
-### Prerequisites
-
-- .NET 8.0 SDK
-- SQL Server or Azure SQL Database
-- Optional: an SMTP-compatible email service for password reset emails
-
-### Setup
-
-1. Clone the repository.
-2. Update `appsettings.json` and `appsettings.Development.json` with your SQL Server connection string under `ConnectionStrings:DefaultConnection`.
-3. Update the `EmailSettings` section with your SMTP values if you want email sending enabled.
-4. Apply database migrations:
+### 1. Clone the Repository
 
 ```bash
+git clone <repository-url>
 cd LoginApp
+```
+
+### 2. Restore Dependencies
+
+```bash
+dotnet restore
+```
+
+### 3. Configure Secrets
+
+Do not add secrets directly into `appsettings.json`.
+
+For local development, you can use .NET User Secrets:
+
+```bash
+dotnet user-secrets init
+```
+
+Example for setting a database connection string:
+
+```bash
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "your-local-connection-string"
+```
+
+Example for setting email configuration:
+
+```bash
+dotnet user-secrets set "EmailSettings:SmtpServer" "your-smtp-server"
+dotnet user-secrets set "EmailSettings:SmtpPort" "587"
+dotnet user-secrets set "EmailSettings:Username" "your-email@example.com"
+dotnet user-secrets set "EmailSettings:Password" "your-email-password"
+```
+
+### 4. Apply Database Migrations
+
+```bash
 dotnet ef database update
 ```
 
-5. Run the application:
+### 5. Run the Application
 
 ```bash
-dotnet run --project LoginApp.csproj
+dotnet run
 ```
 
-6. Open the app in your browser at `https://localhost:5001` or the displayed URL.
+Open the application in your browser:
 
-## Tests
+```text
+https://localhost:5001
+```
 
-The solution includes a test project in `LoginApp.Tests`.
+or
 
-Run tests with:
+```text
+http://localhost:5000
+```
+
+---
+
+## Entity Framework Core Migrations
+
+To create a new migration:
 
 ```bash
-dotnet test LoginApp.Tests/LoginApp.Tests.csproj
+dotnet ef migrations add InitialCreate
 ```
 
-## Notes
+To update the database:
 
-- The app uses ASP.NET Core Identity with custom password policy settings.
-- The default authentication cookie is configured for a 60-minute session with sliding expiration.
+```bash
+dotnet ef database update
+```
 
-## License
+To remove the last migration:
 
-This project is provided as-is.
+```bash
+dotnet ef migrations remove
+```
+
+---
+
+## Authentication and Authorization
+
+This project uses **ASP.NET Core Identity** for user management.
+
+Implemented features may include:
+
+- User registration
+- User login
+- Password hashing
+- Cookie authentication
+- Role-based authorization
+- Secure logout
+- Identity database tables
+
+---
+
+## Email Configuration
+
+Email functionality should be configured using secure settings.
+
+Do not store email passwords in source control.
+
+Recommended storage:
+
+- Azure Key Vault
+- Environment variables
+- .NET User Secrets for local development
+
+Example configuration keys:
+
+```text
+EmailSettings:SmtpServer
+EmailSettings:SmtpPort
+EmailSettings:Username
+EmailSettings:Password
+EmailSettings:FromEmail
+```
+
+---
+
+## Source Control Guidelines
+
+This repository should not contain:
+
+- Passwords
+- API keys
+- Database connection strings
+- Azure client secrets
+- Certificates
+- `.pfx`, `.snk`, `.key`, `.cer` files
+- `bin/`
+- `obj/`
+- `.vs/`
+
+Before pushing to GitHub, check your files:
+
+```bash
+git status
+```
+
+If a sensitive file was accidentally tracked, remove it from Git tracking:
+
+```bash
+git rm --cached appsettings.Development.json
+git commit -m "Remove sensitive config from tracking"
+```
+
+---
+
+## Recommended `.gitignore` Rules
+
+Make sure your `.gitignore` includes:
+
+```gitignore
+bin/
+obj/
+.vs/
+
+appsettings.*.json
+!appsettings.json
+
+secrets.json
+*.pfx
+*.snk
+*.key
+*.cer
+
+logs/
+*.log
+```
+
+---
+
+## Build
+
+To build the project:
+
+```bash
+dotnet build
+```
+
+---
+
+## Publish
+
+To publish the project:
+
+```bash
+dotnet publish -c Release -o ./publish
+```
+
+The published output will be generated inside:
+
+```text
+publish/
+```
+
+---
+
+## Deployment Notes
+
+For production deployment:
+
+- Store secrets in Azure Key Vault.
+- Store non-secret settings in Azure App Configuration.
+- Use Managed Identity where possible.
+- Do not deploy local development configuration files.
+- Configure production connection strings outside the repository.
+- Enable HTTPS.
+- Review authentication and authorization settings.
+
+---
+
+## Best Practices Followed
+
+- No secrets committed to source control
+- Secure configuration management
+- Environment-based settings
+- ASP.NET Core Identity for authentication
+- Entity Framework Core for database access
+- Azure-ready architecture
+- Clean MVC project structure
+
+---
+
+## Author
+
+**Vedant Mamdge**  
+Software Engineer
+``

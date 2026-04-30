@@ -10,15 +10,18 @@ namespace LoginApp.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger<AccountController> _logger;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ILogger<AccountController> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -51,9 +54,11 @@ namespace LoginApp.Controllers
 
             if (result.Succeeded)
             {
+                _logger.LogInformation("User successfully registered: {Email}", model.Email);
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 return RedirectToAction("Index", "Dashboard");
             }
+            _logger.LogWarning("User registration failed for {Email}: {Errors}", model.Email, string.Join(", ", result.Errors.Select(e => e.Description)));
 
             foreach (var error in result.Errors)
                 ModelState.AddModelError("", error.Description);
@@ -93,8 +98,10 @@ namespace LoginApp.Controllers
                 model.RememberMe,
                 lockoutOnFailure: true);
 
-            if (result.Succeeded)
+            if (result.Succeeded) {
+                _logger.LogInformation("User successfully logged in: {Email}", model.Email);
                 return RedirectToAction("Index", "Dashboard");
+            }
 
             if (result.IsLockedOut)
             {
@@ -120,6 +127,7 @@ namespace LoginApp.Controllers
             if (user == null)
             {
                 // Do not reveal whether the email exists
+                _logger.LogWarning("Password reset requested for non-existent email: {Email}", model.Email);
                 return RedirectToAction("ForgotPasswordConfirmation");
             }
 
@@ -136,6 +144,7 @@ namespace LoginApp.Controllers
 
             var emailAddress = user.Email ?? string.Empty;
             await _emailSender.SendEmailAsync(emailAddress, "Reset Your Password", htmlMessage);
+            _logger.LogInformation("Password reset email sent for user: {Email}", user.Email);
             return RedirectToAction("ForgotPasswordConfirmation");
         }
 

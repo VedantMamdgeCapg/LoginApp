@@ -1,20 +1,124 @@
-# Build artifacts
+############################
+# Build results
+############################
 bin/
 obj/
+out/
 
-# Visual Studio files
+############################
+# Visual Studio
+############################
 .vs/
 *.user
 *.suo
 *.userosscache
 *.sln.docstates
 
-# ASP.NET Core
-*.db
+############################
+# Visual Studio Code
+############################
+.vscode/*
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+!.vscode/extensions.json
+
+############################
+# Rider / JetBrains
+############################
+.idea/
+*.sln.iml
+
+############################
+# OS generated files
+############################
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+############################
+# Logs
+############################
+logs/
 *.log
 
-# Rider
-.idea/
+############################
+# ASP.NET Core
+############################
+wwwroot/lib/
+wwwroot/dist/
+appsettings.*.json
+!appsettings.json
 
-# Visual Studio Code
-.vscode/
+############################
+# Secrets & sensitive data
+############################
+secrets.json
+*.pfx
+*.snk
+*.key
+*.cer
+
+############################
+# Azure / Cloud
+############################
+.azure/
+local.settings.json
+
+############################
+# Entity Framework
+############################
+Migrations/*_Snapshot.cs
+Migrations/*.cs
+!Migrations/README.md
+
+############################
+# NuGet
+############################
+.nuget/
+packages/
+*.nupkg
+*.snupkg
+
+############################
+# Test results
+############################
+TestResults/
+
+############################
+# Publish
+############################
+publish/
+PublishProfiles/
+*.pubxml
+*.publishproj
+
+############################
+# Tools
+############################
+.dotnet/
+.dotnet-tools.json
+
+############################
+# User-specific files
+############################
+*.rsuser
+*.vcxproj.user
+
+############################
+# Temporary files
+############################
+*.tmp
+*.temp
+*.bak
+*.swp
+*.orig
+
+############################
+# Coverage
+############################
+coverage/
+*.coverage
+*.coveragexml

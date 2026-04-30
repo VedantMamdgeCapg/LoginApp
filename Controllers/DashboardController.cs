@@ -9,10 +9,12 @@ namespace LoginApp.Controllers
     public class DashboardController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ILogger<DashboardController> _logger;
 
-        public DashboardController(UserManager<ApplicationUser> userManager)
+        public DashboardController(UserManager<ApplicationUser> userManager, ILogger<DashboardController> logger)
         {
             _userManager = userManager;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -45,6 +47,7 @@ namespace LoginApp.Controllers
             var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
             if (result.Succeeded)
             {
+                _logger.LogInformation("User successfully changed password: {Email}", user.Email);
                 ViewBag.SuccessMessage = "Your password has been updated.";
                 return View(new ChangePasswordViewModel());
             }
@@ -75,6 +78,7 @@ namespace LoginApp.Controllers
             var result = await _userManager.SetUserNameAsync(user, model.NewUserName);
             if (result.Succeeded)
             {
+                _logger.LogInformation("User successfully changed username: {Email}", user.Email);
                 ViewBag.SuccessMessage = "Your username has been updated.";
                 return View(new ChangeUsernameViewModel());
             }
